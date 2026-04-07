@@ -35,18 +35,30 @@ This repository contains a JavaFX-based desktop application designed for softwar
 
 ## Development Workflow
 
-### Compilation
-To compile the project and output the bytecode to the `out` directory, use the following command:
+To run this project, ensure you have the **JavaFX SDK** and **Oracle JDBC Driver** available on your machine.
+
+### 1. Prerequisites
+* **Java JDK 21** or higher.
+* **JavaFX SDK** (e.g., version 21+).
+* **Oracle JDBC Driver** (`ojdbc8.jar`, typically included in the project root).
+
+### 2. Environment Setup
+Set the path to your JavaFX library folder. Replace `PATH_TO_FX` with the actual location on your system:
+* **Windows**: `set PATH_TO_FX="C:\path\to\javafx-sdk\lib"`
+* **Linux/Mac**: `export PATH_TO_FX="/path/to/javafx-sdk/lib"`
+
+### 3. Compilation
+Compile the source files and output the bytecode to the `out` directory:
 
 ```bash
-javac -cp ".;ojdbc8.jar" --module-path "C:\libetc\javafx-sdk-21.0.10\lib" --add-modules javafx.controls,javafx.fxml -d out *.java
+javac -cp ".;ojdbc8.jar" --module-path %PATH_TO_FX% --add-modules javafx.controls,javafx.fxml -d out *.java
 ```
 
-### Execution
-To launch the application from the compiled classes:
+### 4. Execution
+Launch the application from the compiled classes:
 
 ```bash
-java -cp "out;ojdbc8.jar" --module-path "C:\libetc\javafx-sdk-21.0.10\lib" --add-modules javafx.controls,javafx.fxml Main
+java -cp "out;ojdbc8.jar" --module-path %PATH_TO_FX% --add-modules javafx.controls,javafx.fxml Main
 ```
 
 ---
