@@ -1,0 +1,6 @@
+{
+  "java.project.referencedLibraries": [
+    "ojdbc8.jar",
+    "C:/libetc/javafx-sdk-21.0.10/lib/*.jar"
+  ]
+}
