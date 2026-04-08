@@ -25,6 +25,10 @@ CREATE TABLE bugs (
         REFERENCES reporters(reporter_id)
 );
 
+-- make reporter not null
+ALTER TABLE bugs
+MODIFY reported_by CONSTRAINT nn_reported_by NOT NULL;
+
 -- reporter table
 CREATE TABLE reporters (
     reporter_id VARCHAR2(100) PRIMARY KEY,  -- e.g. email

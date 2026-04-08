@@ -11,7 +11,10 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+
+//import java.lang.classfile.Label;
 import java.util.Map;
+
 
 public class Main extends Application {
 
@@ -155,9 +158,9 @@ filterBox.getChildren().addAll(statusGroup, priorityGroup, artifactGroup, report
         root.setCenter(content);
 
         // Data Init
-        refreshData(); 
-        filteredList = new FilteredList<>(masterList, b -> true);
-        bugTable.setItems(filteredList);
+        filteredList = new FilteredList<>(masterList, b -> true); // ← initialize first
+bugTable.setItems(filteredList);
+refreshData(); // ← then load data
 
         // ================ LISTENERS & ACTIONS =================
         searchField.textProperty().addListener((o, old, newVal) -> applyFilters());
@@ -359,8 +362,27 @@ filterBox.getChildren().addAll(statusGroup, priorityGroup, artifactGroup, report
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Bug Details");
         alert.setHeaderText("Bug #" + bug.getBugId() + ": " + bug.getTitle());
-        alert.setContentText(String.format("Description: %s\n\nArtifact: %s\nPriority: %s\nStatus: %s\nReported By: %s",
-            bug.getDescription(), bug.getArtifactType(), bug.getPriority(), bug.getStatus(), bug.getReportedBy()));
+        /*alert.setContentText(String.format("Description: %s\n\nArtifact: %s\nPriority: %s\nStatus: %s\nReported By: %s",
+            bug.getDescription(), bug.getArtifactType(), bug.getPriority(), bug.getStatus(), bug.getReportedBy()));*/
+            String dateFound = bug.getDateFound() != null ? bug.getDateFound().toString() : "N/A";
+    String dateFixed = bug.getDateFixed() != null ? bug.getDateFixed().toString() : "N/A";
+
+    alert.setContentText(String.format(
+        "Description:  %s\n\n" +
+        "Artifact:     %s\n" +
+        "Priority:     %s\n" +
+        "Status:       %s\n" +
+        "Reported By:  %s\n" +
+        "Date Found:   %s\n" +
+        "Date Resolved: %s",
+        bug.getDescription(),
+        bug.getArtifactType(),
+        bug.getPriority(),
+        bug.getStatus(),
+        bug.getReportedBy(),
+        dateFound,
+        dateFixed
+    ));
         alert.showAndWait();
     }
 
