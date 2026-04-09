@@ -287,23 +287,31 @@ refreshData(); // ← then load data
         popup.setTitle("Add New Bug"); // Window title bar
         VBox layout = new VBox(10);
         layout.setPadding(new Insets(15));
+
         TextField titleIn = new TextField();
         TextArea descIn = new TextArea(); descIn.setPrefRowCount(3);
         TextField artIn = new TextField();
+
+        // --- Reporter Dropdown ---
         ComboBox<String> repIn = new ComboBox<>();
         try { repIn.getItems().addAll(CRUD.getReporterMap().keySet()); } catch (Exception e) {}
+        // Priority dropdown
+        ComboBox<String> PIn = new ComboBox<>();
+        try { PIn.getItems().addAll("LOW","MEDIUM","HIGH"); } catch (Exception e) {}
+        PIn.setValue("MEDIUM");
         Button save = new Button("Save Bug");
         save.setOnAction(e -> {
             try {
-                CRUD.addBugFromUI(titleIn.getText(), descIn.getText(), artIn.getText(), repIn.getValue(), "MEDIUM");
+                CRUD.addBugFromUI(titleIn.getText(), descIn.getText(), artIn.getText(), repIn.getValue(), PIn.getValue());
                 refreshData();
                 popup.close();
             } catch (Exception ex) { new Alert(Alert.AlertType.ERROR, ex.getMessage()).show(); }
         });
-        layout.getChildren().addAll(new Label("Title"), titleIn, new Label("Description"), descIn, new Label("Artifact"), artIn, new Label("Reporter"), repIn, save);
-        popup.setScene(new Scene(layout, 350, 450));
+        layout.getChildren().addAll(new Label("Title"), titleIn, new Label("Description"), descIn, new Label("Artifact"), artIn, new Label("Reporter"), repIn, new Label("Priority Level"), PIn, save);
+        popup.setScene(new Scene(layout, 350, 520));
         popup.show();
     }
+    
 
     private void openUpdateStatusWindow(Bug selectedBug) {
         Stage popup = new Stage();
