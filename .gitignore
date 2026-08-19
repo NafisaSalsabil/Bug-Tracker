@@ -1,0 +1,12 @@
+# DB Creds
+db.properties
+# BugTracker Tutorial
+BugTracker Tutorial.mp4
+# Sprint Report
+Sprint_2_group_50.pdf_.pdf
+# Compiled java files
+out/
+#VS Code
+.vscode/
+#Java
+.class
