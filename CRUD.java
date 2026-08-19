@@ -3,17 +3,7 @@ import java.util.*;
 
 public class CRUD {
 
-    // ================= DB CONNECTION =================
-    public static Connection getConnection() throws Exception {
-        Class.forName("oracle.jdbc.driver.OracleDriver");
-
-        String url = "jdbc:oracle:thin:@localhost:1521/XEPDB1";
-            String user = "System";     
-            String password = "1234";
-
-        Connection conn = DriverManager.getConnection(url, user, password);
-        return conn;
-    }
+    
 
     // ================= ADD BUG (FROM UI) =================
 public static void addBugFromUI(String title, String description,
@@ -24,7 +14,7 @@ public static void addBugFromUI(String title, String description,
                  "(title, description, artifact_type, status, priority, reported_by) " +
                  "VALUES (?, ?, ?, ?, ?, ?)";
 
-    try (Connection conn = getConnection();
+    try (Connection conn = DatabaseConnection.getConnection();
          PreparedStatement ps = conn.prepareStatement(sql)) {
 
         ps.setString(1, title);
@@ -63,7 +53,7 @@ public static String getAllBugsText() throws Exception {
     String sql = "SELECT bug_id, title, description, artifact_type, priority, status, reported_by " +
                  "FROM system.bugs ORDER BY bug_id";
 
-    try (Connection conn = getConnection();
+    try (Connection conn = DatabaseConnection.getConnection();
          Statement stmt = conn.createStatement();
          ResultSet rs = stmt.executeQuery(sql)) {
 
@@ -117,7 +107,7 @@ private static String safe(String value, int maxLength) {
              "date_found, date_fixed " +
              "FROM system.bugs ORDER BY bug_id";
 
-    try (Connection conn = getConnection();
+    try (Connection conn = DatabaseConnection.getConnection();
          Statement stmt = conn.createStatement();
          ResultSet rs = stmt.executeQuery(sql)) {
 
@@ -147,7 +137,7 @@ private static String safe(String value, int maxLength) {
                      "FROM system.bugs " +
                      "WHERE LOWER(title) LIKE ? OR LOWER(description) LIKE ?";
 
-        try (Connection conn = getConnection();
+        try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
 
             String search = "%" + keyword.toLowerCase() + "%";
@@ -175,7 +165,7 @@ private static String safe(String value, int maxLength) {
 
         String sql = "SELECT DISTINCT status FROM system.bugs ORDER BY status";
 
-        try (Connection conn = getConnection();
+        try (Connection conn = DatabaseConnection.getConnection();
             Statement stmt = conn.createStatement();
             ResultSet rs = stmt.executeQuery(sql)) {
 
@@ -193,7 +183,7 @@ private static String safe(String value, int maxLength) {
 
     String sql = "SELECT DISTINCT artifact_type FROM system.bugs ORDER BY artifact_type";
 
-    try (Connection conn = getConnection();
+    try (Connection conn = DatabaseConnection.getConnection();
          Statement stmt = conn.createStatement();
          ResultSet rs = stmt.executeQuery(sql)) {
 
@@ -209,7 +199,7 @@ private static String safe(String value, int maxLength) {
 public static Map<String, String> getReporterMap() throws Exception {
     Map<String, String> map = new HashMap<>();
     String sql = "SELECT reporter_id, name FROM system.reporters ORDER BY name";
-    try (Connection conn = getConnection();
+    try (Connection conn = DatabaseConnection.getConnection();
          Statement stmt = conn.createStatement();
          ResultSet rs = stmt.executeQuery(sql)) {
         while (rs.next()) {
@@ -249,7 +239,7 @@ public static String getBugsByFilters(String status, String artifact, String rep
     sql.append(" ORDER BY bug_id");
 
     // ===== EXECUTION =====
-    try (Connection conn = getConnection();
+    try (Connection conn = DatabaseConnection.getConnection();
          PreparedStatement ps = conn.prepareStatement(sql.toString())) {
 
         for (int i = 0; i < params.size(); i++) {
@@ -282,7 +272,7 @@ public static String getBugsByFilters(String status, String artifact, String rep
 
     String sql = "SELECT DISTINCT title FROM system.bugs ORDER BY title";
 
-    try (Connection conn = getConnection();
+    try (Connection conn = DatabaseConnection.getConnection();
          Statement stmt = conn.createStatement();
          ResultSet rs = stmt.executeQuery(sql)) {
 
@@ -298,7 +288,7 @@ public static String getBugsByFilters(String status, String artifact, String rep
     public static String deleteBugByTitle(String title) throws Exception {
     String sql = "DELETE FROM system.bugs WHERE title = ?";
 
-    try (Connection conn = getConnection();
+    try (Connection conn = DatabaseConnection.getConnection();
          PreparedStatement ps = conn.prepareStatement(sql)) {
 
         ps.setString(1, title);
@@ -316,7 +306,7 @@ public static String updateStatus(String title, String status) throws Exception 
                  "SET status = ?, date_fixed = ? " +
                  "WHERE title = ?";
 
-    try (Connection conn = getConnection();
+    try (Connection conn = DatabaseConnection.getConnection();
          PreparedStatement ps = conn.prepareStatement(sql)) {
 
         ps.setString(1, status);
@@ -343,7 +333,7 @@ public static String updateStatus(String title, String status) throws Exception 
                  "FROM system.bugs " +
                  "WHERE LOWER(title) LIKE ? OR LOWER(description) LIKE ?";
 
-    try (Connection conn = getConnection();
+    try (Connection conn = DatabaseConnection.getConnection();
          PreparedStatement stmt = conn.prepareStatement(sql)) {
 
         String search = "%" + keyword.toLowerCase() + "%";
@@ -375,7 +365,7 @@ public static String updateStatus(String title, String status) throws Exception 
 
     String sql = "UPDATE system.bugs SET description=? WHERE title=?";
 
-    try (Connection conn = getConnection();
+    try (Connection conn = DatabaseConnection.getConnection();
          PreparedStatement ps = conn.prepareStatement(sql)) {
 
         ps.setString(1, newDesc);
